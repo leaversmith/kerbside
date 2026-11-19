@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en-GB">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Explore a procedurally generated city on foot and behind the wheel.">
+<title>Kerbside</title>
+<style>
+:root{color-scheme:dark;--accent:#f5e67b;--panel:#181e22f5;--line:#56616a;--muted:#bac5c9}
+*{box-sizing:border-box}
+body{margin:0;overflow:hidden;background:#1b2729;color:#faf9ef;font-family:system-ui,sans-serif}
+canvas#city{display:block;width:100vw;height:100dvh}
+.panel{background:var(--panel);border:1px solid var(--line);box-shadow:4px 4px 0 #0b1114a6}
+header{position:absolute;top:20px;left:20px;padding:12px 16px;display:flex;gap:19px;align-items:center}
+h1{margin:0;color:var(--accent);font:900 clamp(23px,4vw,35px)/1 system-ui;letter-spacing:-.065em;text-transform:uppercase}
+#mode{font:700 13px monospace;text-transform:uppercase;border-left:1px solid var(--line);padding-left:14px;min-width:70px}
+aside{position:absolute;top:20px;right:20px;padding:9px;width:166px}
+#map{display:block;width:146px;height:146px;background:#263233}
+.meta{margin-top:8px;display:flex;justify-content:space-between;align-items:center;font:12px monospace;color:var(--muted)}
+button{font:700 13px system-ui;color:#fff;background:#303b42;border:1px solid #68767f;cursor:pointer;padding:6px 9px}
+button:hover,button:focus-visible{background:#475660}
+footer{position:absolute;left:20px;bottom:20px;padding:9px 12px;display:flex;gap:12px;align-items:center;font-size:13px;color:var(--muted)}
+kbd{font:700 12px monospace;color:#fff;border:1px solid var(--line);padding:2px 4px}
+#hint{position:absolute;left:50%;bottom:75px;transform:translateX(-50%);padding:8px 13px;font-size:14px;color:var(--accent);white-space:nowrap}
+#hint:empty{display:none}
+#touch{display:none;position:absolute;bottom:16px;left:12px;right:12px;justify-content:space-between;align-items:end;pointer-events:none}
+#touch button{min-width:46px;min-height:44px;pointer-events:auto;touch-action:none}
+.pad{display:grid;grid-template-columns:repeat(3,46px);gap:3px}
+.pad button:first-child{grid-column:2}
+.pad button:nth-child(2){grid-column:1}
+@media(pointer:coarse){#touch{display:flex}footer{display:none}#hint{bottom:120px}}
+@media(max-width:540px){header{top:10px;left:10px;gap:10px;padding:9px 10px}aside{right:10px;top:10px;width:112px;padding:6px}#map{width:98px;height:98px}.meta{font-size:10px}button{padding:4px 6px}}
+</style>
+<canvas id="city" aria-label="Top-down city game"></canvas>
+<header class="panel"><h1>Kerbside</h1><div id="mode">On foot</div></header>
+<aside class="panel" aria-label="City minimap"><canvas id="map" width="192" height="192"></canvas><div class="meta"><span id="seed"></span><button id="new">New city</button></div></aside>
+<div id="hint" class="panel"></div>
+<footer class="panel"><span><kbd>WASD</kbd> <kbd>↑↓←→</kbd> Move / drive</span><span><kbd>E</kbd> Enter / exit</span></footer>
+<nav id="touch" aria-label="Touch controls"><div class="pad"><button data-key="ArrowUp" aria-label="Up">↑</button><button data-key="ArrowLeft" aria-label="Left">←</button><button data-key="ArrowDown" aria-label="Down">↓</button><button data-key="ArrowRight" aria-label="Right">→</button></div><button id="interact">Enter / exit</button></nav>
+<script src="game.js" defer></script>
+</html>
