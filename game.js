@@ -516,6 +516,9 @@ function newCity() {
 }
 document.querySelector('#new').addEventListener('click',newCity);
 document.querySelector('#interact').addEventListener('click',interact);
+for(const button of document.querySelectorAll('#new,#interact')) {
+  button.addEventListener('click',event=>{ if(event.detail) button.blur(); });
+}
 for(const button of document.querySelectorAll('[data-key]')) {
   button.addEventListener('pointerdown',event=>{
     event.preventDefault();
