@@ -353,10 +353,17 @@ function updatePlayer(dt) {
     const angle=car.angle+steering;
     const x=car.x+Math.cos(angle)*car.speed*dt;
     const y=car.y+Math.sin(angle)*car.speed*dt;
-    if(blocksCar(x,y,angle,car)) {
-      car.speed=0;
-    } else {
+    if(!blocksCar(x,y,angle,car)) {
       Object.assign(car,{x,y,angle});
+    } else if(!blocksCar(x,car.y,angle,car)) {
+      Object.assign(car,{x,angle});
+      car.speed*=0.97;
+    } else if(!blocksCar(car.x,y,angle,car)) {
+      Object.assign(car,{y,angle});
+      car.speed*=0.97;
+    } else {
+      if(!blocksCar(car.x,car.y,angle,car)) car.angle=angle;
+      car.speed*=-0.3;
     }
     return;
   }
