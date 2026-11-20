@@ -292,10 +292,10 @@ function updateTraffic(dt) {
   }
 }
 
-function nearestParked() {
+function nearestCar() {
   let best=null;
   let range=48;
-  for(const car of city.parked) {
+  for(const car of [...city.parked,...city.traffic]) {
     const d=distance(player,car);
     if(d<range) {
       range=d;
@@ -330,9 +330,11 @@ function interact() {
     notifyPlayer('Both sides are blocked');
     return;
   }
-  const car=nearestParked();
+  const car=nearestCar();
   if(car) {
-    city.parked.splice(city.parked.indexOf(car),1);
+    const list=city.parked.includes(car)?city.parked:city.traffic;
+    list.splice(list.indexOf(car),1);
+    if(car.turn) car.edge.next.owner=null;
     driving=car;
     messageTime=0;
   }
@@ -453,7 +455,7 @@ function render() {
   drawStreets();
   for(const lot of city.lots) if(visible(lot.x,lot.y,lot.w,lot.h)) drawLot(lot);
   for(const b of city.buildings) if(visible(b.x,b.y,b.w+7,b.h+9)) drawBuilding(b);
-  const nearby=driving?null:nearestParked();
+  const nearby=driving?null:nearestCar();
   for(const list of [city.parked,city.traffic]) {
     for(const car of list) if(visible(car.x-25,car.y-25,50,50)) drawCar(car,car===nearby);
   }
@@ -476,7 +478,7 @@ function render() {
   fill(mapCtx,'#f5e67b',target.x*sx-2.5,target.y*sy-2.5,5,5);
   const status=driving?'Driving':'On foot';
   if(mode.textContent!==status) mode.textContent=status;
-  const prompt=messageTime>0?message:nearby?'Enter parked car':driving && Math.abs(driving.speed)<18?'Exit car':'';
+  const prompt=messageTime>0?message:nearby?(city.parked.includes(nearby)?'Enter parked car':'Take car'):driving && Math.abs(driving.speed)<18?'Exit car':'';
   if(hint.textContent!==prompt) hint.textContent=prompt;
 }
 
